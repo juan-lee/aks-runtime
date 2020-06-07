@@ -1,0 +1,11 @@
+apiVersion: kpt.dev/v1alpha1
+kind: Kptfile
+metadata:
+    name: kube-prometheus
+upstream:
+    type: git
+    git:
+        commit: dcc46c8aa8c242b845024188a66171b5f08b8513
+        repo: git@github.com:coreos/kube-prometheus
+        directory: /
+        ref: v0.5.0

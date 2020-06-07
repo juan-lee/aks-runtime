@@ -1,0 +1,11 @@
+apiVersion: kpt.dev/v1alpha1
+kind: Kptfile
+metadata:
+    name: microservices-demo
+upstream:
+    type: git
+    git:
+        commit: c2095a7d4b8abd538251b705325d6a493a23e009
+        repo: git@github.com:GoogleCloudPlatform/microservices-demo
+        directory: /release
+        ref: v0.2.0

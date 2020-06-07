@@ -1,0 +1,70 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flux
+  namespace: flux
+spec:
+  template:
+    spec:
+      containers:
+      - name: flux
+        args:
+        - --manifest-generation=true
+        - --memcached-hostname=memcached.flux
+        - --memcached-service=
+        - --ssh-keygen-dir=/var/fluxd/keygen
+        - --git-branch=$(GIT_BRANCH)
+        - --git-path=$(GIT_PATH)
+        - --git-label=$(GIT_LABEL)
+        - --git-user=$(GIT_USER)
+        - --git-email=$(GIT_EMAIL)
+        - --git-url=$(GIT_URL)
+        - --listen-metrics=:3031
+        - --registry-disable-scanning
+        - --sync-garbage-collection
+        env:
+        - name: GIT_USER
+          valueFrom:
+            configMapKeyRef:
+              name: flux-git-config
+              key: git.user
+        - name: GIT_EMAIL
+          valueFrom:
+            configMapKeyRef:
+              name: flux-git-config
+              key: git.email
+        - name: GIT_URL
+          valueFrom:
+            configMapKeyRef:
+              name: flux-git-config
+              key: git.url
+        - name: GIT_BRANCH
+          valueFrom:
+            configMapKeyRef:
+              name: flux-git-config
+              key: git.branch
+        - name: GIT_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: flux-git-config
+              key: git.path
+        - name: GIT_LABEL
+          valueFrom:
+            configMapKeyRef:
+              name: flux-git-config
+              key: git.label
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memcached
+  namespace: flux
+$patch: delete
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: memcached
+  namespace: flux
+$patch: delete

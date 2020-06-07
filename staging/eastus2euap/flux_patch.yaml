@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flux-git-config
+  namespace: flux
+data:
+  git.user: juan-lee
+  git.email: juan-lee@users.noreply.github.com
+  git.url: git@github.com:juan-lee/aks-runtime
+  git.branch: staging/eastus2euap
+  git.path: staging/eastus2euap
+  git.label: staging-eastus2euap
