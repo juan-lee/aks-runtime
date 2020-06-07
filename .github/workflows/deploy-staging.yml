@@ -9,10 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: 'staging/eastus2euap'
       - name: Run a multi-line script
         run: |
-          git fetch
-          git checkout staging/eastus2euap
-          git status
           git rebase origin/master
           git push
