@@ -4,3 +4,4 @@ resources:
 - ../../../../bases/monitoring/kube-prometheus
 patchesStrategicMerge:
 - alertmanager_patch.yaml
+- node-exporter_patch.yaml

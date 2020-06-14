@@ -1,0 +1,18 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-exporter
+  namespace: monitoring
+spec:
+  template:
+    spec:
+      containers:
+        name: node-exporter
+        resources:
+          limits:
+            cpu: 500m
+            memory: 180Mi
+          requests:
+            cpu: 102m
+            memory: 180Mi
