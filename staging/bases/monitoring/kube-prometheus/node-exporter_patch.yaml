@@ -8,7 +8,7 @@ spec:
   template:
     spec:
       containers:
-        name: node-exporter
+      - name: node-exporter
         resources:
           limits:
             cpu: 500m
