@@ -6,3 +6,14 @@ metadata:
   namespace: microservices-demo
 spec:
   replicas: 3
+  template:
+    spec:
+      containers:
+      - name: main
+        resources:
+          requests:
+            cpu: 300m
+            memory: 256Mi
+          limits:
+            cpu: 800m
+            memory: 512Mi
