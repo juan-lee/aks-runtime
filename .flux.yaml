@@ -1,6 +1,6 @@
 version: 1
 patchUpdated:
   generators:
-    - command: for f in $(grep -l -r azure_kv); do sops -i -d $f; done && kustomize build .
+    - command: for f in $(grep -l -r azure_kv *); do sops -i -d $f; done && kustomize build .
     - command: git checkout -- .
   patchFile: flux-patch.yaml
