@@ -11,3 +11,35 @@ data:
   git.branch: staging/eastus2euap
   git.path: staging/eastus2euap
   git.label: staging-eastus2euap
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flux
+  namespace: flux
+spec:
+  template:
+    spec:
+      containers:
+      - name: flux
+        env:
+        - name: SOPS_AZURE_KEYVAULT_URLS
+          valueFrom:
+            secretKeyRef:
+              name: azure-creds
+              key: sopsKeyURL
+        - name: AZURE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: azure-creds
+              key: clientID
+        - name: AZURE_TENANT_ID
+          valueFrom:
+            secretKeyRef:
+              name: azure-creds
+              key: tenantID
+        - name: AZURE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: azure-creds
+              key: clientSecret
