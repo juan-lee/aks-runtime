@@ -11,7 +11,7 @@ spec:
       - name: node-exporter
         resources:
           limits:
-            cpu: 600m
+            cpu: 1000m
             memory: 180Mi
           requests:
             cpu: 102m

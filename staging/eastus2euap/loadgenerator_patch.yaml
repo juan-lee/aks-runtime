@@ -5,7 +5,7 @@ metadata:
   name: loadgenerator
   namespace: microservices-demo
 spec:
-  replicas: 20
+  replicas: 5
   template:
     spec:
       containers:
@@ -15,5 +15,5 @@ spec:
             cpu: 300m
             memory: 256Mi
           limits:
-            cpu: 800m
+            cpu: 1000m
             memory: 512Mi
