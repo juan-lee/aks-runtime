@@ -23,7 +23,7 @@ spec:
         - --listen-metrics=:3031
         - --registry-disable-scanning
         - --sync-garbage-collection
-        - sops
+        - sops=true
         env:
         - name: GIT_USER
           valueFrom:
