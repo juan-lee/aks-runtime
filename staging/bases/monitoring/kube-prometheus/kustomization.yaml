@@ -4,4 +4,8 @@ resources:
 - ../../../../bases/monitoring/kube-prometheus
 patchesStrategicMerge:
 - alertmanager_patch.yaml
+- kube-state-metrics_patch.yaml
 - node-exporter_patch.yaml
+images:
+- name: quay.io/coreos/kube-state-metrics
+  newTag: v1.9.7
