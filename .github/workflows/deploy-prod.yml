@@ -1,16 +1,17 @@
-name: 'Deploy Staging'
+name: 'Deploy Production'
 
 on:
   push:
-    branches: [ master ]
+    tags:
+      - staging-eastus2euap
 
 jobs:
-  push_to_staging:
+  push_to_prod:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: 'staging/eastus2euap'
+          ref: 'prod/southcentralus'
       - name: Run a multi-line script
         run: |
           git fetch

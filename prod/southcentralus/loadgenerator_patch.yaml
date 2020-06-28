@@ -1,0 +1,19 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loadgenerator
+  namespace: microservices-demo
+spec:
+  replicas: 5
+  template:
+    spec:
+      containers:
+      - name: main
+        resources:
+          requests:
+            cpu: 300m
+            memory: 256Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
