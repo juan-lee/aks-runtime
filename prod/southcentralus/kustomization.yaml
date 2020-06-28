@@ -5,7 +5,7 @@ generatorOptions:
 resources:
 - ../../bases/flux
 - ../../bases/cert-manager
-- ../../bases/linkerd
+# - ../../bases/linkerd
 - ../bases/monitoring/kube-prometheus
 - ../../bases/monitoring/eck
 - ../bases/microservices-demo
