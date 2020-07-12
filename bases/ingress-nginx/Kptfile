@@ -1,0 +1,11 @@
+apiVersion: kpt.dev/v1alpha1
+kind: Kptfile
+metadata:
+    name: ingress-nginx
+upstream:
+    type: git
+    git:
+        commit: 6c73d66ae6149876a19825d7abcb8e7afe798522
+        repo: https://github.com/kubernetes/ingress-nginx
+        directory: /deploy/static/provider/cloud
+        ref: controller-v0.34.0

@@ -1,0 +1,11 @@
+apiVersion: kpt.dev/v1alpha1
+kind: Kptfile
+metadata:
+    name: external-dns
+upstream:
+    type: git
+    git:
+        commit: 240d57636d68e2cf8a964599ed8ca1f537da08a6
+        repo: https://github.com/kubernetes-sigs/external-dns
+        directory: /kustomize
+        ref: 240d57636d68e2cf8a964599ed8ca1f537da08a6

@@ -9,6 +9,8 @@ resources:
 - ../bases/monitoring/kube-prometheus
 - ../../bases/monitoring/eck
 - ../bases/microservices-demo
+- ../../bases/ingress-nginx
+- ../../bases/private-dns
 patchesStrategicMerge:
 - flux_patch.yaml
 - loadgenerator_patch.yaml

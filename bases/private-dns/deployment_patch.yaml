@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: external-dns
+spec:
+  template:
+    spec:
+      serviceAccountName: external-dns
+      containers:
+      - name: external-dns
+        args:
+        - --source=service
+        - --source=ingress
+        - --domain-filter=$(DOMAIN)
+        - --provider=azure-private-dns
+        - --azure-resource-group=$(RESOURCE_GROUP)
+        - --azure-subscription-id=$(AZURE_SUBSCRIPTION_ID)
+        env:
+        - name: AZURE_SUBSCRIPTION_ID
+          valueFrom:
+            secretKeyRef:
+              name: azure-creds
+              key: subscriptionID
+        - name: AZURE_TENANT_ID
+          valueFrom:
+            secretKeyRef:
+              name: azure-creds
+              key: tenantID
+        - name: AZURE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: azure-creds
+              key: clientID
+        - name: AZURE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: azure-creds
+              key: clientSecret
+        - name: DOMAIN
+          valueFrom:
+            secretKeyRef:
+              name: azure-creds
+              key: domain
+        - name: RESOURCE_GROUP
+          valueFrom:
+            secretKeyRef:
+              name: azure-creds
+              key: resourceGroup
