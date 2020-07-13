@@ -2,6 +2,7 @@ kind: ENC[AES256_GCM,data:89262Syy,iv:3LDJpWPvEVDd09wUlI65jhFvU3HVBmwewyY9FFiLiJ
 apiVersion: ENC[AES256_GCM,data:s+w=,iv:9z6eHxKdNJWYpXKJD0TEIgv6ufWg/eNR2jL536W0GXM=,tag:0La8Zn7g9Xq3Pn6QOFQ+AQ==,type:str]
 metadata:
     name: ENC[AES256_GCM,data:1kDVTXe1DYdMBIo=,iv:IuGcZ7HPcTUmx5jZBHEYvGka8Z0+K6LLKu91aOgHw/c=,tag:H7xQ4ztrlypbUHlxEsD9kg==,type:str]
+    namespace: ENC[AES256_GCM,data:+D57WbVfdheRai8=,iv:qmd2+OU28A3iUu5mS0oq+ZI0fSIv44uQZMW7Aq+j41Q=,tag:HSHAHfyo3qUw+9bPy9/LfA==,type:str]
 data:
     clientID: ENC[AES256_GCM,data:lYy5FkRgLmTbEc6AUt1GTbtp++sm17P61+bcQntdCdMedQttNSPqA0vAi0aqi5qc,iv:YObJXFRZjQLUo/0qfx3NuX+04DetmbPWUvJIYLld7iI=,tag:vk1V7yPY0/1SkLvtljZZlQ==,type:str]
     clientSecret: ENC[AES256_GCM,data:7VaWmMeovNeX7hpkKIhz0stg8klV3FWqmG8FxA==,iv:2hg8QzyetbxMnB45hqgy5tH9Ctbp7U5a2iB3gbTjr94=,tag:XhNWA0sALj56RGIEQXGdbQ==,type:str]
@@ -18,8 +19,8 @@ sops:
         version: 9841b7778f5649e784475faffe46a344
         created_at: '2020-07-12T19:31:42Z'
         enc: vEGSxJ_przIWq4D6TLckAJfkpE-5vyBWO1vqqCQEL9SYZ0DDAZrbC_TtfMMYTERnuz4YCOYv6eLyGmzO2IV2GAzUV0gES_tAZ8eLirUrxlf4sQBBVaCF7hEMrRUY3CBis49XtLs53w36vmArDrWDzo__4H81TctgaFKzDBNcnyxIy4_DmNMB3Qy-EhejnOkCgzcRTPBEfXceYORt7r8ZRhcxLhAfJjCN27yI3bkf1mwnjPCdzaEVdVxbJPEP9_4-fV3ULbGoZ683gA9yYlG0ctxPVn7uO0j-H1_KwY-9Nwr8Y42fc8G6qeCpc5Tt7zkj0-A6rmA0sjtNzAFtc1KoFA
-    lastmodified: '2020-07-12T19:54:33Z'
-    mac: ENC[AES256_GCM,data:7AWYTWWb3WGRksZWofffZgFJw8JPjbqzzj4kkKrDpt4AWXdHNXqEmwgZlV1B52CJUw58zlV8QIZwI2hgsR5FpmVw5t9hc3EhG1qheJCTa1/XyF88Gj6ocmSaGzsz8Cqif/jsGW3GV93McpedgZYX408XleQY7TJE4s1cW69g5oQ=,iv:jSOyldNupWGUoW5wcyavYz2TjzZj0WSz0DLm6pKPjHc=,tag:jZaKt8Zu8TOuT6Knwsmz/w==,type:str]
+    lastmodified: '2020-07-13T14:51:00Z'
+    mac: ENC[AES256_GCM,data:T6qAM/mLz5+XuoCc6NXgLOaaPYUtAmnLgAZ9ooZR6dGfKfgxwg5I6NNbce7s8+uLeQ5A/5XbZDR3LHMfAzwSCPgQD0Bs1mT4q0ICTJqHZ+ITdIO/UnBS+nrMn/zhe9+FWdGdjbjHLLX4X+AG91YBVgJCNAY4icqwIYk2+qZD6ZM=,iv:W9K53ltZiQVPq99ILFdnHs1JUr6nsr6VpRQi8mGlFxI=,tag:FgqEaOKH6bRal5tLXIPmYA==,type:str]
     pgp: []
     unencrypted_suffix: _unencrypted
     version: 3.5.0
