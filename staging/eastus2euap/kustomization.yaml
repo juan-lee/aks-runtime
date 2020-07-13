@@ -14,6 +14,7 @@ resources:
 patchesStrategicMerge:
 - flux_patch.yaml
 - loadgenerator_patch.yaml
+- private-dns_patch.yaml
 secretGenerator:
 - name: alertmanager-main
   namespace: monitoring
