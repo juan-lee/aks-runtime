@@ -4,7 +4,6 @@ namespace: private-dns
 resources:
 - namespace.yaml
 - ../external-dns
-- secret.yaml
 patches:
 - deployment_patch.yaml
 - clusterrole_patch.yaml
