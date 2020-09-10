@@ -15,10 +15,16 @@ local k = import 'ksonnet/ksonnet.beta.4/k.libsonnet';
     },
 
     nodeExporter+:: {
+      listenAddress: '127.0.0.1',
       port: 9100,
       labels: {
         'app.kubernetes.io/name': 'node-exporter',
         'app.kubernetes.io/version': $._config.versions.nodeExporter,
+      },
+      selectorLabels: {
+        [labelName]: $._config.nodeExporter.labels[labelName]
+        for labelName in std.objectFields($._config.nodeExporter.labels)
+        if !std.setMember(labelName, ['app.kubernetes.io/version'])
       },
     },
   },
@@ -69,6 +75,7 @@ local k = import 'ksonnet/ksonnet.beta.4/k.libsonnet';
       local containerEnv = container.envType;
 
       local podLabels = $._config.nodeExporter.labels;
+      local selectorLabels = $._config.nodeExporter.selectorLabels;
 
       local existsToleration = toleration.new() +
                                toleration.withOperator('Exists');
@@ -89,17 +96,13 @@ local k = import 'ksonnet/ksonnet.beta.4/k.libsonnet';
       local nodeExporter =
         container.new('node-exporter', $._config.imageRepos.nodeExporter + ':' + $._config.versions.nodeExporter) +
         container.withArgs([
-          '--web.listen-address=127.0.0.1:' + $._config.nodeExporter.port,
+          '--web.listen-address=' + std.join(':', [$._config.nodeExporter.listenAddress, std.toString($._config.nodeExporter.port)]),
           '--path.procfs=/host/proc',
           '--path.sysfs=/host/sys',
           '--path.rootfs=/host/root',
           '--no-collector.wifi',
           '--no-collector.hwmon',
-          // The following settings have been taken from
-          // https://github.com/prometheus/node_exporter/blob/0662673/collector/filesystem_linux.go#L30-L31
-          // Once node exporter is being released with those settings, this can be removed.
-          '--collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+)($|/)',
-          '--collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$',
+          '--collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)',
         ]) +
         container.withVolumeMounts([procVolumeMount, sysVolumeMount, rootVolumeMount]) +
         container.mixin.resources.withRequests($._config.resources['node-exporter'].requests) +
@@ -133,7 +136,7 @@ local k = import 'ksonnet/ksonnet.beta.4/k.libsonnet';
       daemonset.mixin.metadata.withName('node-exporter') +
       daemonset.mixin.metadata.withNamespace($._config.namespace) +
       daemonset.mixin.metadata.withLabels(podLabels) +
-      daemonset.mixin.spec.selector.withMatchLabels(podLabels) +
+      daemonset.mixin.spec.selector.withMatchLabels(selectorLabels) +
       daemonset.mixin.spec.template.metadata.withLabels(podLabels) +
       daemonset.mixin.spec.template.spec.withTolerations([existsToleration]) +
       daemonset.mixin.spec.template.spec.withNodeSelector({ 'kubernetes.io/os': 'linux' }) +
@@ -163,7 +166,7 @@ local k = import 'ksonnet/ksonnet.beta.4/k.libsonnet';
         spec: {
           jobLabel: 'app.kubernetes.io/name',
           selector: {
-            matchLabels: $._config.nodeExporter.labels,
+            matchLabels: $._config.nodeExporter.selectorLabels,
           },
           endpoints: [
             {
@@ -194,7 +197,7 @@ local k = import 'ksonnet/ksonnet.beta.4/k.libsonnet';
 
       local nodeExporterPort = servicePort.newNamed('https', $._config.nodeExporter.port, 'https');
 
-      service.new('node-exporter', $.nodeExporter.daemonset.spec.selector.matchLabels, nodeExporterPort) +
+      service.new('node-exporter', $._config.nodeExporter.selectorLabels, nodeExporterPort) +
       service.mixin.metadata.withNamespace($._config.namespace) +
       service.mixin.metadata.withLabels($._config.nodeExporter.labels) +
       service.mixin.spec.withClusterIp('None'),

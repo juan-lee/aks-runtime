@@ -18,6 +18,7 @@ local kp =
   // (import 'kube-prometheus/kube-prometheus-node-ports.libsonnet') +
   // (import 'kube-prometheus/kube-prometheus-static-etcd.libsonnet') +
   // (import 'kube-prometheus/kube-prometheus-thanos-sidecar.libsonnet') +
+  // (import 'kube-prometheus/kube-prometheus-custom-metrics.libsonnet') +
   {
     _config+:: {
       namespace: 'monitoring',
@@ -163,7 +164,7 @@ local kp = (import 'kube-prometheus/kube-prometheus.libsonnet') + {
 
 Along with adding additional rules, we give the user the option to filter or adjust the existing rules imported by `kube-prometheus/kube-prometheus.libsonnet`. The recording rules can be found in [kube-prometheus/rules](../jsonnet/kube-prometheus/rules) and [kubernetes-mixin/rules](https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/rules) while the alerting rules can be found in [kube-prometheus/alerts](../jsonnet/kube-prometheus/alerts) and [kubernetes-mixin/alerts](https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/alerts).
 
-Knowing which rules to change, the user can now use functions from the [Jsonnet standard library](https://jsonnet.org/ref/stdlib.html) to make these changes. Below are examples of both a filter and an adjustment being made to the default rules. These changes can be assigned to a local variable and then added to the `local kp` object as seen in the examples above.  
+Knowing which rules to change, the user can now use functions from the [Jsonnet standard library](https://jsonnet.org/ref/stdlib.html) to make these changes. Below are examples of both a filter and an adjustment being made to the default rules. These changes can be assigned to a local variable and then added to the `local kp` object as seen in the examples above.
 
 #### Filter
 Here the alert `KubeStatefulSetReplicasMismatch` is being filtered out of the group `kubernetes-apps`. The default rule can be seen [here](https://github.com/kubernetes-monitoring/kubernetes-mixin/blob/master/alerts/apps_alerts.libsonnet).
@@ -213,7 +214,7 @@ local update = {
   },
 };
 ```
-Using the example from above about adding in pre-rendered rules, the new local vaiables can be added in as follows:
+Using the example from above about adding in pre-rendered rules, the new local variables can be added in as follows:
 ```jsonnet
 local kp = (import 'kube-prometheus/kube-prometheus.libsonnet') + filter + update + {
     prometheusAlerts+:: (import 'existingrule.json'),
@@ -227,7 +228,7 @@ local kp = (import 'kube-prometheus/kube-prometheus.libsonnet') + filter + updat
 { ['prometheus-' + name]: kp.prometheus[name] for name in std.objectFields(kp.prometheus) } +
 { ['prometheus-adapter-' + name]: kp.prometheusAdapter[name] for name in std.objectFields(kp.prometheusAdapter) } +
 { ['grafana-' + name]: kp.grafana[name] for name in std.objectFields(kp.grafana) }
-``` 
+```
 ## Dashboards
 
 Dashboards can either be added using jsonnet or simply a pre-rendered json dashboard.
@@ -251,30 +252,32 @@ local kp = (import 'kube-prometheus/kube-prometheus.libsonnet') + {
   _config+:: {
     namespace: 'monitoring',
   },
-  grafanaDashboards+:: {
-    'my-dashboard.json':
-      dashboard.new('My Dashboard')
-      .addTemplate(
-        {
-          current: {
-            text: 'Prometheus',
-            value: 'Prometheus',
+  grafana+:: {
+    dashboards+:: {
+      'my-dashboard.json':
+        dashboard.new('My Dashboard')
+        .addTemplate(
+          {
+            current: {
+              text: 'Prometheus',
+              value: 'Prometheus',
+            },
+            hide: 0,
+            label: null,
+            name: 'datasource',
+            options: [],
+            query: 'prometheus',
+            refresh: 1,
+            regex: '',
+            type: 'datasource',
           },
-          hide: 0,
-          label: null,
-          name: 'datasource',
-          options: [],
-          query: 'prometheus',
-          refresh: 1,
-          regex: '',
-          type: 'datasource',
-        },
-      )
-      .addRow(
-        row.new()
-        .addPanel(graphPanel.new('My Panel', span=6, datasource='$datasource')
-                  .addTarget(prometheus.target('vector(1)')))
-      ),
+        )
+        .addRow(
+          row.new()
+          .addPanel(graphPanel.new('My Panel', span=6, datasource='$datasource')
+                    .addTarget(prometheus.target('vector(1)')))
+        ),
+    },
   },
 };
 
@@ -297,8 +300,13 @@ local kp = (import 'kube-prometheus/kube-prometheus.libsonnet') + {
   _config+:: {
     namespace: 'monitoring',
   },
-  grafanaDashboards+:: {
+  grafanaDashboards+:: {  //  monitoring-mixin compatibility
     'my-dashboard.json': (import 'example-grafana-dashboard.json'),
+  },
+  grafana+:: {
+    dashboards+:: {  // use this method to import your dashboards to Grafana
+      'my-dashboard.json': (import 'example-grafana-dashboard.json'),
+    },
   },
 };
 
@@ -311,15 +319,17 @@ local kp = (import 'kube-prometheus/kube-prometheus.libsonnet') + {
 { ['grafana-' + name]: kp.grafana[name] for name in std.objectFields(kp.grafana) }
 ```
 
-Incase you have lots of json dashboard exported out from grafan UI the above approch is going to take lots of time. to improve performance we can use `rawGrafanaDashboards` field and provide it's value as json string by using importstr
+In case you have lots of json dashboard exported out from grafana UI the above approach is going to take lots of time to improve performance we can use `rawDashboards` field and provide it's value as json string by using `importstr`
 [embedmd]:# (../examples/grafana-additional-rendered-dashboard-example-2.jsonnet)
 ```jsonnet
 local kp = (import 'kube-prometheus/kube-prometheus.libsonnet') + {
   _config+:: {
     namespace: 'monitoring',
   },
-  rawGrafanaDashboards+:: {
-    'my-dashboard.json': (importstr 'example-grafana-dashboard.json'),
+  grafana+:: {
+    rawDashboards+:: {
+      'my-dashboard.json': (importstr 'example-grafana-dashboard.json'),
+    },
   },
 };
 

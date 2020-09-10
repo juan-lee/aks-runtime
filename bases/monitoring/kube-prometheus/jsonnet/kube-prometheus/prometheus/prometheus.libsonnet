@@ -6,7 +6,7 @@ local k = import 'ksonnet/ksonnet.beta.4/k.libsonnet';
     namespace: 'default',
 
     versions+:: {
-      prometheus: 'v2.15.2',
+      prometheus: 'v2.20.0',
     },
 
     imageRepos+:: {
@@ -246,8 +246,13 @@ local k = import 'ksonnet/ksonnet.beta.4/k.libsonnet';
           jobLabel: 'k8s-app',
           endpoints: [
             {
-              port: 'http-metrics',
+              port: 'https-metrics',
               interval: '30s',
+              scheme: "https",
+              bearerTokenFile: "/var/run/secrets/kubernetes.io/serviceaccount/token",
+              tlsConfig: {
+                insecureSkipVerify: true
+              }
             },
           ],
           selector: {
@@ -319,6 +324,23 @@ local k = import 'ksonnet/ksonnet.beta.4/k.libsonnet';
                 },
               ],
             },
+            {
+              port: 'https-metrics',
+              scheme: 'https',
+              path: '/metrics/probes',
+              interval: '30s',
+              honorLabels: true,
+              tlsConfig: {
+                insecureSkipVerify: true,
+              },
+              bearerTokenFile: '/var/run/secrets/kubernetes.io/serviceaccount/token',
+              relabelings: [
+                {
+                  sourceLabels: ['__metrics_path__'],
+                  targetLabel: 'metrics_path',
+                },
+              ],
+            },
           ],
           selector: {
             matchLabels: {
@@ -347,8 +369,13 @@ local k = import 'ksonnet/ksonnet.beta.4/k.libsonnet';
           jobLabel: 'k8s-app',
           endpoints: [
             {
-              port: 'http-metrics',
+              port: 'https-metrics',
               interval: '30s',
+              scheme: "https",
+              bearerTokenFile: "/var/run/secrets/kubernetes.io/serviceaccount/token",
+              tlsConfig: {
+                insecureSkipVerify: true
+              },
               metricRelabelings: (import 'kube-prometheus/dropping-deprecated-metrics-relabelings.libsonnet') + [
                 {
                   sourceLabels: ['__name__'],
@@ -407,7 +434,7 @@ local k = import 'ksonnet/ksonnet.beta.4/k.libsonnet';
               metricRelabelings: (import 'kube-prometheus/dropping-deprecated-metrics-relabelings.libsonnet') + [
                 {
                   sourceLabels: ['__name__'],
-                  regex: 'etcd_(debugging|disk|request|server).*',
+                  regex: 'etcd_(debugging|disk|server).*',
                   action: 'drop',
                 },
                 {
