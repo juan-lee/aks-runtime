@@ -6,6 +6,6 @@ upstream:
     type: git
     git:
         commit: dcc46c8aa8c242b845024188a66171b5f08b8513
-        repo: git@github.com:coreos/kube-prometheus
+        repo: git@github.com:prometheus-operator/kube-prometheus
         directory: /
         ref: v0.5.0
