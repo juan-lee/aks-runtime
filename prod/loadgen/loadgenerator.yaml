@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: loadgenerator
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: staging-loadgenerator
+  namespace: loadgenerator
+spec:
+  selector:
+    matchLabels:
+      app: staging-loadgenerator
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: staging-loadgenerator
+      annotations:
+        sidecar.istio.io/rewriteAppHTTPProbers: "true"
+    spec:
+      terminationGracePeriodSeconds: 5
+      restartPolicy: Always
+      containers:
+      - name: main
+        image: gcr.io/google-samples/microservices-demo/loadgenerator:v0.2.0
+        env:
+        - name: FRONTEND_ADDR
+          value: "52.253.227.61:80"
+        - name: USERS
+          value: "30"
+        resources:
+          requests:
+            cpu: 300m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prod-loadgenerator
+  namespace: loadgenerator
+spec:
+  selector:
+    matchLabels:
+      app: prod-loadgenerator
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: prod-loadgenerator
+      annotations:
+        sidecar.istio.io/rewriteAppHTTPProbers: "true"
+    spec:
+      terminationGracePeriodSeconds: 5
+      restartPolicy: Always
+      containers:
+      - name: main
+        image: gcr.io/google-samples/microservices-demo/loadgenerator:v0.2.0
+        env:
+        - name: FRONTEND_ADDR
+          value: "40.74.216.194:80"
+        - name: USERS
+          value: "30"
+        resources:
+          requests:
+            cpu: 300m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi

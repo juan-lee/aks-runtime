@@ -7,6 +7,7 @@ resources:
 - ../../bases/cert-manager
 - ../bases/monitoring/kube-prometheus
 - ../../bases/monitoring/eck
+- loadgenerator.yaml
 patchesStrategicMerge:
 - flux_patch.yaml
 secretGenerator:
