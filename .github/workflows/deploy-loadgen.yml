@@ -1,0 +1,20 @@
+name: 'Deploy Loadgen'
+
+on:
+  push:
+    tags:
+      - staging-eastus2euap
+
+jobs:
+  push_to_prod:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: 'prod/loadgen'
+      - name: Run a multi-line script
+        run: |
+          git fetch
+          git rebase origin/master
+          git status
+          git push
