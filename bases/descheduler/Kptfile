@@ -1,0 +1,11 @@
+apiVersion: kpt.dev/v1alpha1
+kind: Kptfile
+metadata:
+  name: descheduler
+upstream:
+  type: git
+  git:
+    commit: c86d1c7eb2ccb6bf4f415232f8b91a63d60392e4
+    repo: https://github.com/kubernetes-sigs/descheduler
+    directory: kubernetes
+    ref: v0.20.0

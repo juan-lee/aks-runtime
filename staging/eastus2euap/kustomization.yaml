@@ -11,6 +11,7 @@ resources:
 - ../bases/microservices-demo
 - ../../bases/ingress-nginx
 - ../../bases/private-dns
+- ../bases/descheduler
 patchesStrategicMerge:
 - flux_patch.yaml
 - loadgenerator_patch.yaml
