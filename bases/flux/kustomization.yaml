@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- github.com/fluxcd/flux//deploy?ref=v1.20.1
+- github.com/fluxcd/flux//deploy?ref=v1.24.2
 - flux-git-config.yaml
 patchesStrategicMerge:
 - flux_patch.yaml
