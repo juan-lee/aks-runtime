@@ -6,21 +6,21 @@ resources:
 - ../../bases/flux
 - ../../bases/cert-manager
 - ../../bases/linkerd
-- ../bases/monitoring/kube-prometheus
-- ../../bases/monitoring/eck
-- ../bases/microservices-demo
-- ../../bases/ingress-nginx
-- ../../bases/private-dns
-- ../bases/descheduler
+# - ../bases/monitoring/kube-prometheus
+# - ../../bases/monitoring/eck
+# - ../bases/microservices-demo
+# - ../../bases/ingress-nginx
+# - ../../bases/private-dns
+# - ../bases/descheduler
 patchesStrategicMerge:
 - flux_patch.yaml
-- loadgenerator_patch.yaml
-secretGenerator:
-- name: alertmanager-main
-  namespace: monitoring
-  files:
-  - alertmanager.yaml
-- name: azure-creds
-  namespace: private-dns
-  envs:
-  - private-dns.txt
+# - loadgenerator_patch.yaml
+# secretGenerator:
+# - name: alertmanager-main
+#   namespace: monitoring
+#   files:
+#   - alertmanager.yaml
+# - name: azure-creds
+#   namespace: private-dns
+#   envs:
+#   - private-dns.txt
